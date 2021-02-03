@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: cake987315
+    url: jdbc:mysql://localhost:3306/?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    initialization-mode: always
+    sql-script-encoding: utf-8
+
+mybatis:
+  type-aliases-package: moe.dazecake.eco.pojo
+  mapper-locations: classpath:mybatis/*.xml
