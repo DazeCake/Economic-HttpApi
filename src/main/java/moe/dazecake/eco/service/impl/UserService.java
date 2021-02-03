@@ -21,8 +21,14 @@ public class UserService implements moe.dazecake.eco.service.UserService {
 
     @Override
     public String spendMoneyByName(String name, Long money) {
+        String r = "";
         try {
-            String r = JSON.toJSONString(userMapper.spendMoneyByName(name, money));
+            if (money <= userMapper.getUserByName(name).getMoney()){
+
+                r = JSON.toJSONString(userMapper.spendMoneyByName(name, money));
+            }else {
+                r = "{\"code\":3}";
+            }
             return r;
         } catch (Exception e) {
             e.printStackTrace();
