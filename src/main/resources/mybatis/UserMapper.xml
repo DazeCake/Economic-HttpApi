@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="moe.dazecake.eco.mapper.UserMapper.java">
+    <update id="addMoneyByName">
+        update `user`
+        set `money` = `mony` + #{money}
+        where `name` = #{name};
+    </update>
+
+    <update id="spendMoneyByName">
+        update `user`
+        set `money` = `mony` - #{money}
+        where `name` = #{name};
+    </update>
+
+    <update id="transferMoneyToUserByName">
+        update `user`
+        set `money` = `mony` - #{money}
+        where `name` = #{nameA};
+
+        update `user`
+        set `money` = `mony` + #{money}
+        where `name` = #{nameB};
+    </update>
+
+    <update id="transferMoneyToUserByName">
+        update `user`
+        set `money` = `mony` - #{money}
+        where `qq` = #{qqA};
+
+        update `user`
+        set `money` = `mony` + #{money}
+        where `qq` = #{qqB};
+    </update>
+
+    <select id="getUserByName">
+        select *
+        from `user`
+        where `name` = #{name};
+    </select>
+
+    <select id="getUserByQQ">
+        select *
+        from `user`
+        where `qq` = #{qq};
+    </select>
+</mapper>
