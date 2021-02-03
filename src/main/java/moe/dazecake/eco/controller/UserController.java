@@ -1,8 +1,6 @@
 package moe.dazecake.eco.controller;
 
-import moe.dazecake.eco.mapper.UserMapper;
 import moe.dazecake.eco.service.impl.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserMapper userMapper;
-
+    //资金操作
     @PostMapping("/addMoneyByName")
     public String addMoneyByName(String name, Long money) {
         return new UserService().addMoneyByName(name, money);
@@ -35,6 +31,7 @@ public class UserController {
         return new UserService().transferMoneyToUserByQQ(qqA, qqB, money);
     }
 
+    //信息查询
     @GetMapping("/getUserByName")
     public String getUserByName(String name) {
         return new UserService().getUserByName(name);
@@ -45,6 +42,7 @@ public class UserController {
         return new UserService().getUserByQQ(qq);
     }
 
+    //连续签到
     @PostMapping("/checkInByName")
     public String checkInByName(String name) {
         return new UserService().checkInByName(name);
