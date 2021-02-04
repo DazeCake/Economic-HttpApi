@@ -2,16 +2,19 @@ package moe.dazecake.eco.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import moe.dazecake.eco.mapper.UserMapper;
+import moe.dazecake.eco.pojo.RUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserService implements moe.dazecake.eco.service.UserService {
     @Autowired
     private UserMapper userMapper;
 
+    //资金操作
     @Override
     public String addMoneyByName(String name, Long money) {
         try {
-            String r = JSON.toJSONString(userMapper.addMoneyByName(name, money));
+            RUser rUser = new RUser(userMapper.addMoneyByName(name, money), 0);
+            String r = JSON.toJSONString(rUser);
             return r;
         } catch (Exception e) {
             e.printStackTrace();
@@ -23,10 +26,10 @@ public class UserService implements moe.dazecake.eco.service.UserService {
     public String spendMoneyByName(String name, Long money) {
         String r = "";
         try {
-            if (money <= userMapper.getUserByName(name).getMoney()){
-
-                r = JSON.toJSONString(userMapper.spendMoneyByName(name, money));
-            }else {
+            if (isMoneyEnough(money, userMapper.getUserByName(name).getMoney())) {
+                RUser rUser = new RUser(userMapper.spendMoneyByName(name, money), 0);
+                r = JSON.toJSONString(rUser);
+            } else {
                 r = "{\"code\":3}";
             }
             return r;
@@ -39,8 +42,13 @@ public class UserService implements moe.dazecake.eco.service.UserService {
     @Override
     public String transferMoneyToUserByName(String nameA, String nameB, Long money) {
         try {
-            String r = JSON.toJSONString(userMapper.transferMoneyToUserByName(nameA, nameB, money));
-            return r;
+            if (isMoneyEnough(money, userMapper.getUserByName(nameA).getMoney())) {
+                RUser rUser = new RUser(userMapper.transferMoneyToUserByName(nameA, nameB, money), 0);
+                return JSON.toJSONString(rUser);
+            }else {
+                String r = "{\"code\":3}";
+                return r;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,36 +58,45 @@ public class UserService implements moe.dazecake.eco.service.UserService {
     @Override
     public String transferMoneyToUserByQQ(String qqA, String qqB, Long money) {
         try {
-            String r = JSON.toJSONString(userMapper.transferMoneyToUserByQQ(qqA, qqB, money));
-            return r;
+            if (isMoneyEnough(money, userMapper.getUserByQQ(qqA).getMoney())) {
+                RUser rUser = new RUser(userMapper.transferMoneyToUserByQQ(qqA, qqB, money), 0);
+                return JSON.toJSONString(rUser);
+            }else {
+                String r = "{\"code\":3}";
+                return r;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    //信息查询
     @Override
     public String getUserByName(String name) {
         try {
-            String r = JSON.toJSONString(userMapper.getUserByName(name));
+            RUser rUser = new RUser(userMapper.getUserByName(name), 0);
+            String r = JSON.toJSONString(rUser);
             return r;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "{\"code\":2}";
     }
 
     @Override
     public String getUserByQQ(String qq) {
         try {
-            String r = JSON.toJSONString(userMapper.getUserByQQ(qq));
+            RUser rUser = new RUser(userMapper.getUserByQQ(qq), 0);
+            String r = JSON.toJSONString(rUser);
             return r;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "{\"code\":2}";
     }
 
+    //连续签到
     @Override
     public String checkInByName(String name) {
         try {
@@ -100,6 +117,15 @@ public class UserService implements moe.dazecake.eco.service.UserService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //金额检查
+    public static boolean isMoneyEnough(Long spend, Long have) {
+        if (spend < have) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -17,6 +17,5 @@ public class User {
     private String email;
     private Long money;
     private Date time;
-    private String token;
 
 }

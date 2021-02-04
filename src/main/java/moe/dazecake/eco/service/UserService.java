@@ -1,9 +1,5 @@
 package moe.dazecake.eco.service;
 
-import moe.dazecake.eco.pojo.User;
-
-import java.util.HashMap;
-
 public interface UserService {
 
     //资金操作
